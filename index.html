@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Foto Timestamp – Logo Kanan Kecil</title>
+    <title>Foto Timestamp – Ukuran Asli</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -123,23 +123,28 @@
         logoLeft.crossOrigin = "anonymous";
         logoLeft.src = "https://3.bp.blogspot.com/-785KT0vymeM/WmHvm2hNWtI/AAAAAAAABeE/DaWbakR0SUMqWllKJX6vk2IgmO2AryW7ACLcBGAs/s1600/LOGO%2BVECTORKU-3.jpg";
 
-        // Logo kanan-bawah (pengganti teks “Marki / Waktu asli”)
+        // Logo kanan-bawah (pengganti teks Marki/Waktu asli)
         const logoRight = new Image();
         logoRight.crossOrigin = "anonymous";
         logoRight.src = "https://i.imgur.com/2gaL3hl.png";
 
         function renderImage(img) {
-            const w = img.width, h = img.height;
-            canvas.width = w; canvas.height = h;
+            // Gunakan ukuran asli gambar agar tidak berubah
+            const w = img.naturalWidth;
+            const h = img.naturalHeight;
+            canvas.width = w;
+            canvas.height = h;
+
             ctx.drawImage(img, 0, 0, w, h);
 
+            // Judul
             const judulRaw = document.getElementById("judul").value.trim();
             const judulLines = judulRaw.replace("Ekstrakurikuler ", "Ekstrakurikuler\n").split("\n");
 
             const [lokasi, koordinat] = document.getElementById("lokasiSelect").value.split("|");
             const nama = document.getElementById("nama").value;
 
-            // ==== ambil tanggal & waktu custom bila ada ====
+            // Ambil tanggal & waktu custom
             const inputTgl = document.getElementById("customTanggal").value;
             const inputWkt = document.getElementById("customWaktu").value;
             let tanggalStr, waktuStr;
@@ -149,16 +154,12 @@
                     const [hh, mm] = inputWkt.split(":");
                     tgl.setHours(hh, mm);
                 }
-                tanggalStr = tgl.toLocaleDateString("id-ID",
-                    { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
-                waktuStr = tgl.toLocaleTimeString("id-ID",
-                    { hour: "2-digit", minute: "2-digit" });
+                tanggalStr = tgl.toLocaleDateString("id-ID", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
+                waktuStr = tgl.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
             } else {
                 const now = new Date();
-                tanggalStr = now.toLocaleDateString("id-ID",
-                    { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
-                waktuStr = now.toLocaleTimeString("id-ID",
-                    { hour: "2-digit", minute: "2-digit" });
+                tanggalStr = now.toLocaleDateString("id-ID", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
+                waktuStr = now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
             }
 
             const fontJudul = Math.floor(h * 0.045);
@@ -171,7 +172,7 @@
                 `• Lokasi: ${lokasi}`,
                 `• Koordinat: ${koordinat}`,
                 `• ${nama}`,
-                "✓ Waktu & lokasi diverifikasi oleh Marki"
+                "✓ Waktu & lokasi diverifikasi"
             ];
 
             ctx.fillStyle = "white";
@@ -185,36 +186,30 @@
             const baseX = 20;
             let y = h - 20;
 
-            // detail teks kiri-bawah
+            // Teks kiri bawah
             ctx.font = `bold ${fontDetail}px Arial`;
             for (let i = textLines.length - 1; i >= 0; i--) {
                 ctx.fillText(textLines[i], baseX, y);
                 y -= lineSpacingDetail;
             }
 
-            // judul
+            // Judul
             ctx.font = `bold ${fontJudul}px Arial`;
             for (let i = judulLines.length - 1; i >= 0; i--) {
                 ctx.fillText(judulLines[i], baseX, y);
                 y -= fontJudul + 10;
             }
 
-            // logo kiri bawah
+            // Logo kiri bawah
             y -= logoLeftHeight;
             ctx.drawImage(logoLeft, baseX, y, logoLeftWidth, logoLeftHeight);
 
-            // ==== logo kanan bawah (diperkecil) ====
-            const rightWidth = w * 0.08;  // <-- sekarang 10% lebar foto
+            // Logo kanan bawah (diperkecil, proporsional)
+            const rightWidth = w * 0.10; // 10% dari lebar foto
             const rightHeight = rightWidth * (logoRight.height / logoRight.width);
-            ctx.drawImage(
-                logoRight,
-                w - rightWidth - 30,
-                h - rightHeight - 20,
-                rightWidth,
-                rightHeight
-            );
-            // ========================================
+            ctx.drawImage(logoRight, w - rightWidth - 30, h - rightHeight - 20, rightWidth, rightHeight);
 
+            // Hasil akhir
             const dataUrl = canvas.toDataURL("image/png");
             const item = document.createElement("div");
             item.className = "gallery-item";
