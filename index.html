@@ -236,7 +236,7 @@
             }
 
             // ==== LOGO DINAMIS (ikut ukuran foto 4:3) ====
-            const logoScale = w * 0.1; // 10% dari lebar foto
+            const logoScale = w * 0.08; // 10% dari lebar foto
             const logoLeftHeight = logoScale * (logoLeft.height / logoLeft.width);
             y -= logoLeftHeight;
             ctx.drawImage(logoLeft, baseX, y, logoScale, logoLeftHeight);
@@ -278,6 +278,7 @@
 </body>
 
 </html>
+
 
 
 
