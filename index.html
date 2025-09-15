@@ -147,11 +147,9 @@
             let cropH = originalH;
 
             if (originalW / originalH > targetRatio) {
-                // kebanyakan lebar → potong kiri-kanan
                 cropW = originalH * targetRatio;
                 cropH = originalH;
             } else {
-                // kebanyakan tinggi → potong atas-bawah
                 cropW = originalW;
                 cropH = originalW / targetRatio;
             }
@@ -159,7 +157,6 @@
             const cropX = (originalW - cropW) / 2;
             const cropY = (originalH - cropH) / 2;
 
-            // Set canvas ke ukuran hasil crop 4:3
             canvas.width = cropW;
             canvas.height = cropH;
 
@@ -238,18 +235,17 @@
                 y -= fontJudul + 10;
             }
 
-            // ==== LOGO FIX SIZE ====
-            const logoFixedWidth = 100;
-            const logoLeftHeight = logoFixedWidth * (logoLeft.height / logoLeft.width);
+            // ==== LOGO DINAMIS (ikut ukuran foto 4:3) ====
+            const logoScale = w * 0.1; // 10% dari lebar foto
+            const logoLeftHeight = logoScale * (logoLeft.height / logoLeft.width);
             y -= logoLeftHeight;
-            ctx.drawImage(logoLeft, baseX, y, logoFixedWidth, logoLeftHeight);
+            ctx.drawImage(logoLeft, baseX, y, logoScale, logoLeftHeight);
 
-            const logoRightWidth = 165;
+            const logoRightWidth = w * 0.1;
             const logoRightHeight = logoRightWidth * (logoRight.height / logoRight.width);
             ctx.drawImage(logoRight, w - logoRightWidth - 30, h - logoRightHeight - 20, logoRightWidth, logoRightHeight);
-            // =======================
+            // ==============================================
 
-            // Tambah ke galeri
             const dataUrl = canvas.toDataURL("image/png");
             const item = document.createElement("div");
             item.className = "gallery-item";
@@ -282,5 +278,3 @@
 </body>
 
 </html>
-
-
