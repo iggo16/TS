@@ -19,7 +19,6 @@
             margin-bottom: 20px;
             text-align: center;
             color: #2c3e50;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         .form-input {
@@ -187,8 +186,11 @@
 
             const h = canvas.height;
             const w = canvas.width;
-            const fontDetail = Math.floor(h * 0.027);
-            const fontJudul = Math.floor(fontDetail * 1.5);
+
+            // === Perubahan utama ukuran font ===
+            const fontDetail = Math.floor(h * 0.035);   // lebih besar, mirip Foto 1
+            const fontJudul = Math.floor(fontDetail * 1.6); // judul lebih tebal
+
             const lineSpacingDetail = fontDetail * 1.8;
 
             const textLines = [
@@ -235,16 +237,16 @@
                 y -= fontJudul + 10;
             }
 
-            // ==== LOGO DINAMIS (ikut ukuran foto 4:3) ====
-            const logoScale = w * 0.08; // 10% dari lebar foto
+            // ==== LOGO DINAMIS ====
+            const logoScale = w * 0.08;
             const logoLeftHeight = logoScale * (logoLeft.height / logoLeft.width);
             y -= logoLeftHeight;
             ctx.drawImage(logoLeft, baseX, y, logoScale, logoLeftHeight);
 
-            const logoRightWidth = w * 0.13;
+            const logoRightWidth = w * 0.16;
             const logoRightHeight = logoRightWidth * (logoRight.height / logoRight.width);
             ctx.drawImage(logoRight, w - logoRightWidth - 30, h - logoRightHeight - 20, logoRightWidth, logoRightHeight);
-            // ==============================================
+            // ======================
 
             const dataUrl = canvas.toDataURL("image/png");
             const item = document.createElement("div");
@@ -278,8 +280,3 @@
 </body>
 
 </html>
-
-
-
-
-
